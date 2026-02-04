@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Pre-loading Segoe UI fonts if available on Windows -->
+    <style>
+        body { font-family: 'Segoe UI Variable', 'Segoe UI', sans-serif; }
+    </style>
+</head>
+<body>
+    <div class="window-container">
+        <div class="header">
+            <div class="menu-icon" onclick="toggleCalculatorMode()">&#xE80F;</div> 
+            <div class="title" id="mode-title">Standard</div>
+            <div class="header-icons">
+                <div class="history-icon" onclick="toggleHistoryList()">&#xe81c;</div> 
+            </div>
+        </div>
+
+        <!-- Side menu removed -->
+        
+        <div class="calculator-body">
+            <div class="display-container">
+                <div class="history-display" id="history"></div>
+                <div class="current-display" id="current">0</div>
+            </div>
+
+            <div class="memory-bar">
+                <button class="mem-btn" id="mc-btn" disabled onclick="memoryClear()">MC</button>
+                <button class="mem-btn" id="mr-btn" disabled onclick="memoryRecall()">MR</button>
+                <button class="mem-btn" onclick="memoryAdd()">M+</button>
+                <button class="mem-btn" onclick="memorySubtract()">M-</button>
+                <button class="mem-btn" onclick="memoryStore()">MS</button>
+                <button class="mem-btn" id="m-list-btn" disabled onclick="toggleMemoryList()">M<span>&#8964;</span></button>
+            </div>
+
+            <!-- Scientific Mode Toolbar -->
+            <div id="sci-toolbar" class="sci-toolbar">
+                <button class="sci-toolbar-btn" onclick="toggleTrigMenu()">Trigonometry <span>&#8964;</span></button>
+                <button class="sci-toolbar-btn" onclick="unimplemented('Function menu')">Function <span>&#8964;</span></button>
+            </div>
+
+            <!-- Trig Popup Menu -->
+            <div id="trig-popup" class="trig-popup">
+                <div class="trig-item" onclick="mathTrig('sin')">sin</div>
+                <div class="trig-item" onclick="mathTrig('cos')">cos</div>
+                <div class="trig-item" onclick="mathTrig('tan')">tan</div>
+                <!-- Extra trig functions could go here -->
+            </div>
+
+            <div class="keypad">
+                <!-- History Overlay -->
+                <div id="history-overlay" class="memory-overlay" style="display: none;">
+                    <div class="memory-content" id="history-content">
+                        <!-- History items will be injected here -->
+                    </div>
+                    <button class="trash-btn" onclick="clearHistory()">
+                        &#128465; 
+                    </button>
+                </div>
+
+                <div id="memory-overlay" class="memory-overlay" style="display: none;">
+                    <div class="memory-content" id="memory-content">
+                    </div>
+                   <button class="trash-btn" onclick="memoryClear()">
+                       &#128465; 
+                    </button>
+                </div>
+                <!-- Row 1 -->
+                <button class="btn fn-btn" onclick="appendOperator('%')">%</button>
+                <button class="btn fn-btn" onclick="clearEntry()">CE</button>
+                <button class="btn fn-btn" onclick="clearAll()">C</button>
+                <button class="btn fn-btn" onclick="backspace()">&#9003;</button>
+
+                <!-- Row 2 -->
+                <button class="btn fn-btn" onclick="oneOverX()">&#185;/&#x1d465;</button>
+                <button class="btn fn-btn" onclick="square()">&#x1d465;&#xb2;</button>
+                <button class="btn fn-btn" onclick="squareRoot()">&#8730;&#x1d465;</button>
+                <button class="btn fn-btn" onclick="appendOperator('/')">&#247;</button>
+
+                <!-- Row 3 -->
+                <button class="btn num-btn" onclick="appendNumber('7')">7</button>
+                <button class="btn num-btn" onclick="appendNumber('8')">8</button>
+                <button class="btn num-btn" onclick="appendNumber('9')">9</button>
+                <button class="btn fn-btn" onclick="appendOperator('*')">&#215;</button>
+
+                <!-- Row 4 -->
+                <button class="btn num-btn" onclick="appendNumber('4')">4</button>
+                <button class="btn num-btn" onclick="appendNumber('5')">5</button>
+                <button class="btn num-btn" onclick="appendNumber('6')">6</button>
+                <button class="btn fn-btn" onclick="appendOperator('-')">&#8722;</button>
+
+                <!-- Row 5 -->
+                <button class="btn num-btn" onclick="appendNumber('1')">1</button>
+                <button class="btn num-btn" onclick="appendNumber('2')">2</button>
+                <button class="btn num-btn" onclick="appendNumber('3')">3</button>
+                <button class="btn fn-btn" onclick="appendOperator('+')">+</button>
+
+                <!-- Row 6 -->
+                <button class="btn num-btn" onclick="toggleSign()">+/-</button>
+                <button class="btn num-btn" onclick="appendNumber('0')">0</button>
+                <button class="btn num-btn" onclick="appendNumber('.')">.</button>
+                <button class="btn equals-btn" onclick="calculate()">=</button>
+            </div>
+
+            <div class="keypad scientific" id="scientific-keypad" style="display: none;">
+                <!-- Row 1: 2nd, pi, e, C, backspace -->
+                <button class="btn fn-btn" onclick="unimplemented('2nd')"><small>2<sup>nd</sup></small></button>
+                <button class="btn fn-btn" onclick="mathFunc('PI')">π</button>
+                <button class="btn fn-btn" onclick="mathFunc('E')">e</button>
+                <button class="btn fn-btn" onclick="clearAll()">C</button>
+                <button class="btn fn-btn" onclick="backspace()">&#9003;</button>
+                
+
+                <!-- Row 2: x^2, 1/x, |x|, exp, mod -->
+                <button class="btn fn-btn" onclick="square()">x²</button>
+                <button class="btn fn-btn" onclick="oneOverX()">1/x</button>
+                <button class="btn fn-btn" onclick="mathFunc('abs')">|x|</button>
+                <button class="btn fn-btn" onclick="appendOperator('exp')">exp</button>
+                <button class="btn fn-btn" onclick="appendOperator('mod')">mod</button>
+
+                <!-- Row 3: sqrt, (, ), n!, / -->
+                <button class="btn fn-btn" onclick="squareRoot()">√x</button>
+                <button class="btn fn-btn" onclick="unimplemented('(')">(</button>
+                <button class="btn fn-btn" onclick="unimplemented(')')">)</button>
+                <button class="btn fn-btn" onclick="factorial()">n!</button>
+                <button class="btn fn-btn" onclick="appendOperator('/')">&#247;</button>
+
+                <!-- Row 4: x^y, 7, 8, 9, * -->
+                <button class="btn fn-btn" onclick="appendOperator('pow')">xʸ</button>
+                <button class="btn num-btn" onclick="appendNumber('7')">7</button>
+                <button class="btn num-btn" onclick="appendNumber('8')">8</button>
+                <button class="btn num-btn" onclick="appendNumber('9')">9</button>
+                <button class="btn fn-btn" onclick="appendOperator('*')">&#215;</button>
+
+                <!-- Row 5: 10^x, 4, 5, 6, - -->
+                <button class="btn fn-btn" onclick="mathFunc('10x')">10ˣ</button>
+                <button class="btn num-btn" onclick="appendNumber('4')">4</button>
+                <button class="btn num-btn" onclick="appendNumber('5')">5</button>
+                <button class="btn num-btn" onclick="appendNumber('6')">6</button>
+                <button class="btn fn-btn" onclick="appendOperator('-')">&#8722;</button>
+
+                <!-- Row 6: log, 1, 2, 3, + -->
+                <button class="btn fn-btn" onclick="mathFunc('log10')">log</button>
+                <button class="btn num-btn" onclick="appendNumber('1')">1</button>
+                <button class="btn num-btn" onclick="appendNumber('2')">2</button>
+                <button class="btn num-btn" onclick="appendNumber('3')">3</button>
+                <button class="btn fn-btn" onclick="appendOperator('+')">+</button>
+
+                <!-- Row 7: ln, +/-, 0, ., = -->
+                <button class="btn fn-btn" onclick="mathFunc('log')">ln</button>
+                <button class="btn num-btn" onclick="toggleSign()">+/-</button>
+                <button class="btn num-btn" onclick="appendNumber('0')">0</button>
+                <button class="btn num-btn" onclick="appendNumber('.')">.</button>
+                <button class="btn equals-btn" onclick="calculate()">=</button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

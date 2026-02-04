@@ -1,0 +1,508 @@
+:root {
+    --bg-color: #202020;
+    --display-color: #202020;
+    --btn-bg-num: #323232;
+    --btn-bg-num-hover: #3b3b3b;
+    --btn-bg-fn: #2d2d2d; /* Slightly darker for functions */
+    --btn-bg-fn-hover: #363636;
+    --accent-color: #76b9ed;
+    --accent-hover: #6facdc;
+    --accent-active: #5f9bc6;
+    --text-primary: #ffffff;
+    --text-history: #a8a8a8;
+    --border-radius: 6px;
+    --gap-size: 2px;
+}
+
+body {
+    background-color: #000;
+    color: var(--text-primary);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
+}
+
+.window-container {
+    background-color: var(--bg-color);
+    width: 400px; /* Increased from 320px */
+    height: 575px; /* Reduced by ~10% (was 640px) */
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid #333;
+}
+
+.header {
+    height: 32px;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    font-size: 14px;
+    user-select: none;
+}
+
+/* Side Menu */
+.side-menu {
+    position: absolute;
+    top: 32px;
+    left: 0;
+    width: 200px;
+    height: calc(100% - 32px);
+    background-color: #2c2c2c;
+    z-index: 100;
+    transform: translateX(-100%);
+    transition: transform 0.2s ease-in-out;
+    padding-top: 10px;
+    border-right: 1px solid #3c3c3c;
+    display: flex;
+    flex-direction: column;
+}
+
+.side-menu.open {
+    transform: translateX(0);
+}
+
+.menu-overlay-backdrop {
+    position: absolute;
+    top: 32px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 90;
+    display: none;
+}
+.menu-overlay-backdrop.open {
+    display: block;
+}
+
+.menu-item {
+    padding: 10px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    border-left: 3px solid transparent;
+}
+.menu-item:hover {
+    background-color: #3b3b3b;
+}
+.menu-item.active {
+    background-color: #3b3b3b;
+    border-left: 3px solid var(--accent-color);
+    font-weight: 600;
+}
+
+.header-icons {
+    display: flex;
+    gap: 15px;
+}
+
+.history-icon {
+    font-family: 'Segoe MDL2 Assets', 'Segoe UI Symbol', sans-serif;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 4px;
+    border-radius: 4px;
+}
+.history-icon:hover {
+    background-color: rgba(255,255,255,0.1);
+}
+
+.menu-icon {
+    font-family: 'Segoe MDL2 Assets', 'Segoe UI Symbol', 'Segoe UI', sans-serif;
+    width: 40px;
+    height: 32px; /* Header height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 16px;
+    margin-right: 8px;
+    transition: background-color 0.1s;
+    color: var(--text-primary);
+}
+
+.menu-icon:hover {
+    background-color: #3b3b3b;
+}
+
+.menu-icon:active {
+    background-color: #323232;
+    transform: scale(0.96);
+}
+
+.title {
+    font-weight: 600;
+    flex-grow: 1;
+}
+
+/* Side Menu */
+.side-menu {
+    position: absolute;
+    top: 32px;
+    left: 0;
+    width: 200px;
+    height: calc(100% - 32px);
+    background-color: #2c2c2c;
+    z-index: 100;
+    transform: translateX(-100%);
+    transition: transform 0.2s ease-in-out;
+    padding-top: 10px;
+    border-right: 1px solid #3c3c3c;
+    display: flex;
+    flex-direction: column;
+}
+
+.side-menu.open {
+    transform: translateX(0);
+}
+
+.menu-overlay-backdrop {
+    position: absolute;
+    top: 32px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 90;
+    display: none;
+}
+.menu-overlay-backdrop.open {
+    display: block;
+}
+
+.menu-item {
+    padding: 10px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    border-left: 3px solid transparent;
+}
+.menu-item:hover {
+    background-color: #3b3b3b;
+}
+.menu-item.active {
+    background-color: #3b3b3b;
+    border-left: 3px solid var(--accent-color);
+    font-weight: 600;
+}
+
+.calculator-body {
+    padding: 0 4px 4px 4px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.display-container {
+    padding: 20px 10px;
+    text-align: right;
+    margin-bottom: 5px;
+}
+
+.history-display {
+    color: var(--text-history);
+    font-size: 14px;
+    min-height: 20px;
+    margin-bottom: 4px;
+}
+
+.current-display {
+    font-size: 56px; /* Increased from 46px */
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: clip; /* We might want scrolling or scaling, but clip is default like behavior */
+}
+
+/* Memory Bar */
+.memory-bar {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 4px;
+    height: 28px;
+    position: relative; /* Ensure it stays above overlay if needed */
+    z-index: 30;
+}
+
+.mem-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    font-size: 12px;
+    font-family: inherit;
+    cursor: pointer;
+    border-radius: 4px;
+    flex: 1;
+    margin: 0 2px;
+}
+
+.mem-btn:hover:not(:disabled) {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.mem-btn:disabled {
+    color: #555;
+    cursor: default;
+}
+
+/* Keypad Grid */
+.keypad {
+    position: relative; /* Context for memory overlay */
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    gap: var(--gap-size);
+    flex-grow: 1;
+}
+
+.btn {
+    border: none;
+    outline: none;
+    font-size: 18px; /* Increased base size */
+    font-family: inherit;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: background-color 0.1s;
+    user-select: none;
+}
+
+.num-btn {
+    background-color: var(--btn-bg-num);
+    color: white;
+    font-weight: 600;
+    font-size: 20px; /* Reduced from 24px */
+}
+
+.num-btn:hover {
+    background-color: var(--btn-bg-num-hover);
+}
+
+.num-btn:active {
+    filter: brightness(0.85);
+}
+
+.fn-btn {
+    background-color: var(--btn-bg-fn);
+    color: white;
+    font-size: 14px;
+}
+
+.fn-btn:hover {
+    background-color: var(--btn-bg-fn-hover);
+}
+
+.fn-btn:active {
+    filter: brightness(0.85);
+}
+
+.equals-btn {
+    background-color: var(--accent-color);
+    color: #000;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.equals-btn:hover {
+    background-color: var(--accent-hover);
+}
+
+.equals-btn:active {
+    background-color: var(--accent-active);
+}
+
+/* Scrollbar styling if needed */
+.current-display::-webkit-scrollbar {
+    height: 0px; 
+}
+
+/* Memory Overlay & Items */
+.memory-overlay {
+    position: absolute;
+    top: 0;
+    bottom: -4px;
+    left: -4px;
+    right: -4px;
+    background-color: var(--bg-color);
+    z-index: 20;
+    display: none; /* Controlled by JS */
+    flex-direction: column;
+    padding: 10px;
+    animation: fadeIn 0.15s ease-out;
+    border-bottom-left-radius: 8px; /* Match container radius */
+    border-bottom-right-radius: 8px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.memory-content {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding-top: 10px;
+}
+
+.memory-item {
+    display: flex;
+    flex-direction: column;
+    padding: 6px; /* Reduced from 10px */
+    margin-bottom: 2px;
+    border-radius: 4px;
+    transition: background-color 0.1s;
+}
+
+.memory-item:hover {
+    background-color: #323232;
+}
+
+.memory-item:hover .memory-actions {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Reusing memory classes for history but with specific tweaks if needed */
+.history-item {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    margin-bottom: 4px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.1s;
+}
+.history-item:hover {
+    background-color: #323232;
+}
+
+.history-expression {
+    text-align: right;
+    font-size: 14px;
+    color: #a8a8a8;
+    margin-bottom: 4px;
+}
+
+.history-result {
+    text-align: right;
+    font-size: 20px;
+    font-weight: 600;
+    color: white;
+}
+
+.memory-val {
+    text-align: right;
+    font-size: 20px; /* Reduced from 24px */
+    font-weight: 600;
+    cursor: pointer;
+    padding: 2px; /* Reduced from 5px */
+}
+.memory-val:hover {
+    color: white; 
+}
+
+.memory-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 6px;
+    margin-top: 2px;
+    opacity: 0; 
+    pointer-events: none;
+    transition: opacity 0.1s;
+}
+
+.memory-action-btn {
+    background-color: transparent;
+    border: 1px solid #484848;
+    color: white;
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background-color 0.1s;
+}
+
+.memory-action-btn:hover {
+    background-color: #484848;
+}
+
+.trash-btn {
+    align-self: flex-end;
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 20px;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+
+.trash-btn:hover {
+    background-color: #323232;
+}
+
+/* Scientific Toolbar */
+.sci-toolbar {
+    display: none; /* hidden by default */
+    flex-direction: row;
+    gap: 10px;
+    padding: 0 10px 5px 10px;
+}
+
+.sci-toolbar-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    font-size: 13px;
+    padding: 2px 6px;
+    cursor: pointer;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.sci-toolbar-btn:hover {
+    background-color: var(--btn-bg-num-hover);
+}
+
+.trig-popup {
+    position: absolute;
+    top: 155px; /* approximate position below header/display */
+    left: 10px;
+    background-color: #323232;
+    border: 1px solid #454545;
+    border-radius: 6px;
+    padding: 8px;
+    z-index: 50;
+    display: none;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+.trig-popup.open {
+    display: grid;
+}
+
+.trig-item {
+    padding: 6px 12px;
+    font-size: 13px;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 4px;
+}
+.trig-item:hover {
+    background-color: #3e3e3e;
+}
+
+/* Adjust keypad grid rows for scientific */
+.keypad.scientific {
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(7, 1fr);
+}
+

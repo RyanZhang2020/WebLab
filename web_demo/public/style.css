@@ -1,0 +1,90 @@
+:root {
+    --primary: #6c5ce7;
+    --bg: #dfe6e9;
+    --surface: #ffffff;
+    --text: #2d3436;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    display: flex;
+    justify-content: center;
+    padding-top: 50px;
+    margin: 0;
+}
+
+.container {
+    background-color: var(--surface);
+    width: 400px;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+h1 { margin: 0; color: var(--primary); }
+p { color: #636e72; font-size: 0.9rem; }
+
+.input-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 1.5rem;
+}
+
+input {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #b2bec3;
+    border-radius: 6px;
+    outline: none;
+}
+
+input:focus {
+    border-color: var(--primary);
+}
+
+button {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: transform 0.1s;
+}
+
+button:active { transform: scale(0.95); }
+
+ul { list-style: none; padding: 0; }
+
+li {
+    background: #f1f2f6;
+    margin-bottom: 10px;
+    padding: 10px 15px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    animation: slideIn 0.3s ease;
+}
+
+li span { font-size: 1.1rem; }
+
+.delete-btn {
+    background: #ff7675;
+    padding: 5px 10px;
+    font-size: 0.8rem;
+    margin-left: 10px;
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}

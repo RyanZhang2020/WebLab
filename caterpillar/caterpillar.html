@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Very Hungry Caterpillar Simulation</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            text-align: center;
+            background-color: #f0f8ff;
+            color: #333;
+        }
+        #stage {
+            margin-top: 50px;
+            min-height: 200px;
+            font-size: 1.2em;
+        }
+        .emotion {
+            font-size: 5em;
+            display: block;
+            margin: 20px auto;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        .food-list {
+            list-style-type: none;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>The Very Hungry Caterpillar</h1>
+
+    <div id="stage">
+        <div id="visual" class="emotion">🥚</div>
+        <p id="story-text">In the light of the moon a little egg lay on a leaf.</p>
+        <ul id="stomach" class="food-list"></ul>
+    </div>
+
+    <button id="next-btn" onclick="nextStep()">Start / Next</button>
+
+    <script>
+        let step = 0;
+        const storyText = document.getElementById("story-text");
+        const visual = document.getElementById("visual");
+        const nextBtn = document.getElementById("next-btn");
+        const stomachList = document.getElementById("stomach");
+
+        // Simple step-by-step state machine
+        const steps = [
+            {
+                text: "In the light of the moon a little egg lay on a leaf.",
+                emoji: "🥚"
+            },
+            {
+                text: "One Sunday morning the warm sun came up and - pop! - out of the egg came a tiny and very hungry caterpillar.",
+                emoji: "🐛",
+                action: "hatch"
+            },
+            {
+                text: "On Monday he ate through one apple. But he was still hungry.",
+                emoji: "🐛🍎",
+                food: "1 Apple"
+            },
+            {
+                text: "On Tuesday he ate through two pears, but he was still hungry.",
+                emoji: "🐛🍐🍐",
+                food: "2 Pears"
+            },
+            {
+                text: "On Wednesday he ate through three plums, but he was still hungry.",
+                emoji: "🐛🍑🍑🍑",
+                food: "3 Plums"
+            },
+            {
+                text: "On Thursday he ate through four strawberries, but he was still hungry.",
+                emoji: "🐛🍓🍓🍓🍓",
+                food: "4 Strawberries"
+            },
+            {
+                text: "On Friday he ate through five oranges, but he was still hungry.",
+                emoji: "🐛🍊🍊🍊🍊🍊",
+                food: "5 Oranges"
+            },
+            {
+                text: "On Saturday he ate through... one piece of chocolate cake, one ice-cream cone, one pickle, one slice of Swiss cheese, one slice of salami, one lollipop, one piece of cherry pie, one sausage, one cupcake, and one slice of watermelon.",
+                emoji: "🐛🤢",
+                food: "The Entire Feast!"
+            },
+            {
+                text: "That night he had a stomachache!",
+                emoji: "🤢🐛"
+            },
+            {
+                text: "The next day was Sunday again. The caterpillar ate through one nice green leaf, and after that he felt much better.",
+                emoji: "🐛🍃",
+                food: "1 Green Leaf"
+            },
+            {
+                text: "Now he wasn't hungry any more - and he wasn't a little caterpillar any more. He was a big, fat caterpillar.",
+                emoji: "🐛 (Big)",
+                scale: true
+            },
+            {
+                text: "He built a small house, called a cocoon, around himself. He stayed inside for more than two weeks.",
+                emoji: "💊" // Close enough to a cocoon for emojis
+            },
+            {
+                text: "Then he nibbled a hole in the cocoon, pushed his way out and...",
+                emoji: "💊💥"
+            },
+            {
+                text: "He was a beautiful butterfly!",
+                emoji: "🦋"
+            }
+        ];
+
+        function nextStep() {
+            if (step < steps.length) {
+                const currentScene = steps[step];
+                storyText.innerText = currentScene.text;
+
+                // Speech Synthesis
+                if ('speechSynthesis' in window) {
+                    window.speechSynthesis.cancel(); // Stop any previous speech
+                    const msg = new SpeechSynthesisUtterance(currentScene.text);
+                    window.speechSynthesis.speak(msg);
+                }
+
+                visual.innerText = currentScene.emoji;
+                
+                if (currentScene.food) {
+                    const li = document.createElement("li");
+                    li.innerText = "Eaten: " + currentScene.food;
+                    stomachList.appendChild(li);
+                }
+
+                if (currentScene.scale) {
+                    visual.style.transform = "scale(1.5)";
+                } else {
+                     visual.style.transform = "scale(1)";
+                }
+
+                step++;
+                
+                if (step === steps.length) {
+                    nextBtn.innerText = "The End";
+                    nextBtn.disabled = true;
+                }
+            }
+        }
+    </script>
+</body>
+</html>
